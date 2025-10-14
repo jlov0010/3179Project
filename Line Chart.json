@@ -1,0 +1,20 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {"url": "https://raw.githubusercontent.com/jlov0010/3179/main/Full%20File.csv"},
+  "width": "container",
+  "height": 350,
+  "transform": [
+    {"filter": "datum['Primary State'] !== '0'"},
+    {"filter": "datum['Primary State'] !== null && datum['Primary State'] !== ''"}],
+  "mark": "line",
+  "encoding": {
+    "x": {"field": "Year","type": "quantitative","title": "Year"},
+    "y": {"aggregate": "sum", "field": "Entries","type":"quantitative","title": "Total Entries"},
+    "color": {"field": "Primary State","type": "nominal","title": "State"},
+    "tooltip": [
+      {"field": "Year", "type": "quantitative", "format": "d"},
+      {"field": "Primary State", "type": "nominal", "title": "State"},
+      {"aggregate": "sum", "field": "Entries", "type": "quantitative", "title": "Total Entries", "format": ","}
+    ]
+  }
+}

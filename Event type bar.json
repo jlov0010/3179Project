@@ -1,0 +1,23 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {"url": "https://raw.githubusercontent.com/jlov0010/3179/main/Full%20File.csv"},
+  "width": "container",
+  "height": 350,
+  "transform": [
+    { "filter": "datum.Distance === 'Long' || datum.Distance === 'Middle' || datum.Distance === 'Sprint'" },
+    {"joinaggregate": [{"op": "count", "as": "Total_Events_In_Year"}], "groupby": ["Year"]},
+    {"calculate": "1 / datum.Total_Events_In_Year", "as": "Proportion_Unit"}
+  ],
+  "mark": {"type": "bar"},
+  "encoding": {
+    "x": {"field": "Year","type": "ordinal","title": "Year","axis": {"labelAngle": 0}},
+    "y": {"aggregate": "count","type": "quantitative","stack": "normalize","title": "Proportion of Total Events (%)","axis": {"format": ".0%"}},
+    "color": {"field": "Distance", "type": "nominal", "title": "Distance Category"},
+    "tooltip": [
+      {"field": "Year", "type": "ordinal"}, 
+      {"field": "Distance", "type": "nominal", "title": "Event Type"},
+      {"aggregate": "count", "field": "*", "title": "Number of Events", "format": ","},
+      {"field": "Proportion_Unit","aggregate": "sum","title": "Percentage of Years Events (%)","format": ".1%"}
+    ]
+  }
+}

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Three Visualisations Layout</title>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+
+  <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/pure-min.css" crossorigin="anonymous">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background-color: #fafafa;
+    }
+
+    .page {
+      padding: 1em;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Each row box */
+    .vis-row {
+      display: flex;
+      flex-wrap: wrap;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background-color: #f9f9f9;
+      margin-bottom: 30px;
+      overflow: hidden;
+      box-sizing: border-box;
+      justify-content: flex-start;
+    }
+
+    /* Left and right parts */
+    .description,
+    .vis-container {
+      box-sizing: border-box;
+      padding: 15px;
+    }
+
+    /* Text area */
+    .description {
+      flex: 1 1 33%;
+      min-width: 250px;
+      background-color: #fffefc;
+    }
+
+    /* Chart area */
+    .vis-container {
+      flex: 1 1 67%;
+      min-width: 300px;
+      max-width: 750px; /* Max width set here */
+      min-height: 300px;
+      background-color: #fdfdfd;
+      align-self: center;
+      padding-left: 0; /* Removed padding */
+    }
+
+    /* Divider for rows where description is on the left */
+    .vis-row.left-text .description {
+      border-right: 1px solid #ccc;
+    }
+
+    /* Divider for rows where description is on the right */
+    .vis-row.right-text .description {
+      border-left: 1px solid #ccc;
+      order: 2; /* Move description to the right */
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 1.5em;
+    }
+
+    h2 {
+      margin-top: 0;
+    }
+
+    /* Responsive layout */
+    @media (max-width: 800px) {
+      .vis-row {
+        flex-direction: column;
+      }
+
+      .vis-row.left-text .description,
+      .vis-row.right-text .description {
+        border-right: none;
+        border-left: none;
+        border-bottom: 1px solid #ccc;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page">
+    <h1>Visualisation of the last decade of Orienteering</h1>
+
+    <!-- ROW 1 (Text Left) -->
+    <div class="vis-row left-text">
+      <div class="description">
+        <h2>Overview and definitions</h2>
+        <p>Orienteering is a sport where competitors use a map and compass to navigate from point to point as fast as
+          possible. Controls are physical markers on the course, competitors must navigate their way between these to
+          complete their course. The terrain in which courses are set can vary significantly, traditionally events are
+          usually set in forests or bushland, however the sport has expanded to include events set in schools and
+          universities, and on large segments of a city or town.</p>
+        <p>The most common type of orienteering is done on foot, but there are events that use mountain bikes or skis to
+          move, and other events that use radio direction finding transmitters rather than maps.</p>
+        <p>Include information about event locations and why they are all clustered in specific locations, and why less
+          in remote locations due to lack of location data.</p>
+      </div>
+      <div class="vis-container" id="vis1"></div>
+    </div>
+
+    <!-- ROW 2 (Text Right) -->
+    <div class="vis-row right-text">
+      <div class="vis-container" id="vis2"></div>
+      <div class="description">
+        <h2>Types of events</h2>
+        <p>The types of events for orienteering are typically classified into three categories. Long distance events are
+          nearly exclusively in forests or bushland and can be up to 15 km as the crow flies.</p>
+        <p>Middle distance is primarily comprised of Park & Street events. These events are run on very simplified maps
+          in city suburbs and typically range from 3–10 km in length.</p>
+        <p>Sprint events are short events typically 2–4 km in length. These events are run mostly on school or university
+          campuses and require far more technical high-speed navigation.</p>
+      </div>
+    </div>
+
+    <!-- ROW 3 (Text Left) -->
+    <div class="vis-row left-text">
+      <div class="description">
+        <h2>Impacts of Covid</h2>
+        <p>Placeholder for third chart.</p>
+      </div>
+      <div class="vis-container" id="vis3"></div>
+    </div>
+
+    <footer>
+      <p style="text-align:center; font-size:0.9em; color:#666;">SOURCE</p>
+    </footer>
+  </div>
+
+  <script>
+    const specs = [
+      { id: '#vis3', path: './Line Chart.json' },
+      { id: '#vis2', path: './Event type bar.json' },
+      { id: '#vis1', path: './Test.json' }
+    ];
+
+    specs.forEach(chart => {
+      fetch(chart.path)
+        .then(res => res.json())
+        .then(spec => {
+          spec.autosize = { type: "fit", contains: "padding" };
+          vegaEmbed(chart.id, spec, { actions: false }).catch(console.error);
+        });
+    });
+  </script>
+
+</body>
+
+</html>
